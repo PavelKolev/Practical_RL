@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!-- saved from url=(0069)https://towardsdatascience.com/media/52bcc333fb0f28a72e37acab52b696c5 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>a3c_params.py – Medium</title><meta name="description" content="GitHub Gist: instantly share code, notes, and snippets."><meta name="twitter:widgets:csp" content="on"><meta name="robots" content="noindex"><!--<base target="_blank">--><base href="." target="_blank"><style>body {text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: "ff-tisa-web-pro", Georgia, Cambria, "Times New Roman", Times, serif; font-weight: 400; color: #333332; font-size: 18px; line-height: 1.4; margin: 0; background-color: white; overflow: hidden;}iframe {max-width: 100%;}</style></head><body><style>.gist .gist-file { margin-bottom: 0 !important; }.gist { text-rendering: auto; }</style><script src="./34fc0b85639dd9e9881f907cd0ba440c.js.download" charset="utf-8"></script><link rel="stylesheet" href="./gist-embed-fd43f22140a6ad2cc9d0aa1f169a01f3.css"><div id="gist96357429" class="gist">
+    <div class="gist-file">
+      <div class="gist-data">
+        <div class="js-gist-file-update-container js-task-list-container file-box">
+  <div id="file-a3c_params-py" class="file">
+    
+
+  <div itemprop="text" class="Box-body p-0 blob-wrapper data type-python ">
+      
+<table class="highlight tab-size js-file-line-container" data-tab-size="8" data-paste-markdown-skip="">
+      <tbody><tr>
+        <td id="file-a3c_params-py-L1" class="blob-num js-line-number" data-line-number="1"></td>
+        <td id="file-a3c_params-py-LC1" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-s1">sys</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L2" class="blob-num js-line-number" data-line-number="2"></td>
+        <td id="file-a3c_params-py-LC2" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-s1">torch</span>  </td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L3" class="blob-num js-line-number" data-line-number="3"></td>
+        <td id="file-a3c_params-py-LC3" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-s1">gym</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L4" class="blob-num js-line-number" data-line-number="4"></td>
+        <td id="file-a3c_params-py-LC4" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-s1">numpy</span> <span class="pl-k">as</span> <span class="pl-s1">np</span>  </td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L5" class="blob-num js-line-number" data-line-number="5"></td>
+        <td id="file-a3c_params-py-LC5" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-s1">torch</span>.<span class="pl-s1">nn</span> <span class="pl-k">as</span> <span class="pl-s1">nn</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L6" class="blob-num js-line-number" data-line-number="6"></td>
+        <td id="file-a3c_params-py-LC6" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-s1">torch</span>.<span class="pl-s1">optim</span> <span class="pl-k">as</span> <span class="pl-s1">optim</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L7" class="blob-num js-line-number" data-line-number="7"></td>
+        <td id="file-a3c_params-py-LC7" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-s1">torch</span>.<span class="pl-s1">nn</span>.<span class="pl-s1">functional</span> <span class="pl-k">as</span> <span class="pl-v">F</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L8" class="blob-num js-line-number" data-line-number="8"></td>
+        <td id="file-a3c_params-py-LC8" class="blob-code blob-code-inner js-file-line"><span class="pl-k">from</span> <span class="pl-s1">torch</span>.<span class="pl-s1">autograd</span> <span class="pl-k">import</span> <span class="pl-v">Variable</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L9" class="blob-num js-line-number" data-line-number="9"></td>
+        <td id="file-a3c_params-py-LC9" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-s1">matplotlib</span>.<span class="pl-s1">pyplot</span> <span class="pl-k">as</span> <span class="pl-s1">plt</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L10" class="blob-num js-line-number" data-line-number="10"></td>
+        <td id="file-a3c_params-py-LC10" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-s1">pandas</span> <span class="pl-k">as</span> <span class="pl-s1">pd</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L11" class="blob-num js-line-number" data-line-number="11"></td>
+        <td id="file-a3c_params-py-LC11" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L12" class="blob-num js-line-number" data-line-number="12"></td>
+        <td id="file-a3c_params-py-LC12" class="blob-code blob-code-inner js-file-line"><span class="pl-c"># hyperparameters</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L13" class="blob-num js-line-number" data-line-number="13"></td>
+        <td id="file-a3c_params-py-LC13" class="blob-code blob-code-inner js-file-line"><span class="pl-s1">hidden_size</span> <span class="pl-c1">=</span> <span class="pl-c1">256</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L14" class="blob-num js-line-number" data-line-number="14"></td>
+        <td id="file-a3c_params-py-LC14" class="blob-code blob-code-inner js-file-line"><span class="pl-s1">learning_rate</span> <span class="pl-c1">=</span> <span class="pl-c1">3e-4</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L15" class="blob-num js-line-number" data-line-number="15"></td>
+        <td id="file-a3c_params-py-LC15" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L16" class="blob-num js-line-number" data-line-number="16"></td>
+        <td id="file-a3c_params-py-LC16" class="blob-code blob-code-inner js-file-line"><span class="pl-c"># Constants</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L17" class="blob-num js-line-number" data-line-number="17"></td>
+        <td id="file-a3c_params-py-LC17" class="blob-code blob-code-inner js-file-line"><span class="pl-v">GAMMA</span> <span class="pl-c1">=</span> <span class="pl-c1">0.99</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L18" class="blob-num js-line-number" data-line-number="18"></td>
+        <td id="file-a3c_params-py-LC18" class="blob-code blob-code-inner js-file-line"><span class="pl-s1">num_steps</span> <span class="pl-c1">=</span> <span class="pl-c1">300</span></td>
+      </tr>
+      <tr>
+        <td id="file-a3c_params-py-L19" class="blob-num js-line-number" data-line-number="19"></td>
+        <td id="file-a3c_params-py-LC19" class="blob-code blob-code-inner js-file-line"><span class="pl-s1">max_episodes</span> <span class="pl-c1">=</span> <span class="pl-c1">3000</span></td>
+      </tr>
+</tbody></table>
+
+
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      <div class="gist-meta">
+        <a href="https://gist.github.com/cyoon1729/34fc0b85639dd9e9881f907cd0ba440c/raw/431088257a530b3d96d4e34ea12530927ad18bb3/a3c_params.py" style="float:right">view raw</a>
+        <a href="https://gist.github.com/cyoon1729/34fc0b85639dd9e9881f907cd0ba440c#file-a3c_params-py">a3c_params.py</a>
+        hosted with ❤ by <a href="https://github.com/">GitHub</a>
+      </div>
+    </div>
+</div>
+<script>var height = -1; var delayMs = 200; if (document) {document.domain = document.domain;}function notifyResize(height) {height = height ? height : document.documentElement.offsetHeight; var resized = false; if (window.donkey && donkey.resize) {donkey.resize(height);var elements = document.getElementsByClassName("gist-data"); for (var i = 0; i < elements.length; i++) {elements[i].style.overflow = "visible"}resized = true;}if (parent && parent._resizeIframe) {var obj = {iframe: window.frameElement, height: height}; parent._resizeIframe(obj); resized = true;}if (window.location && window.location.hash === "#amp=1" && window.parent && window.parent.postMessage) {window.parent.postMessage({sentinel: "amp", type: "embed-size", height: height}, "*");}if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.resize) {window.webkit.messageHandlers.resize.postMessage(height); resized = true;}return resized;}function maybeResize() {try {if (document.documentElement.offsetHeight != height && notifyResize()) {height = document.documentElement.offsetHeight;}delayMs = Math.min(delayMs * 2, 1000000); setTimeout(maybeResize, delayMs);} catch(error) {console.log('maybeResize error: ', error)}}maybeResize();</script></body></html>

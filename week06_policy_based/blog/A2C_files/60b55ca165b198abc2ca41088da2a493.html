@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<!-- saved from url=(0069)https://towardsdatascience.com/media/60b55ca165b198abc2ca41088da2a493 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>a2c.py – Medium</title><meta name="description" content="GitHub Gist: instantly share code, notes, and snippets."><meta name="twitter:widgets:csp" content="on"><meta name="robots" content="noindex"><!--<base target="_blank">--><base href="." target="_blank"><style>body {text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family: "ff-tisa-web-pro", Georgia, Cambria, "Times New Roman", Times, serif; font-weight: 400; color: #333332; font-size: 18px; line-height: 1.4; margin: 0; background-color: white; overflow: hidden;}iframe {max-width: 100%;}</style></head><body><style>.gist .gist-file { margin-bottom: 0 !important; }.gist { text-rendering: auto; }</style><script src="./5399c9718909b7d7dc63b0853acd242a.js.download" charset="utf-8"></script><link rel="stylesheet" href="./gist-embed-fd43f22140a6ad2cc9d0aa1f169a01f3.css"><div id="gist96357469" class="gist">
+    <div class="gist-file">
+      <div class="gist-data">
+        <div class="js-gist-file-update-container js-task-list-container file-box">
+  <div id="file-a2c-py" class="file">
+    
+
+  <div itemprop="text" class="Box-body p-0 blob-wrapper data type-python ">
+      
+<table class="highlight tab-size js-file-line-container" data-tab-size="8" data-paste-markdown-skip="">
+      <tbody><tr>
+        <td id="file-a2c-py-L1" class="blob-num js-line-number" data-line-number="1"></td>
+        <td id="file-a2c-py-LC1" class="blob-code blob-code-inner js-file-line"><span class="pl-k">def</span> <span class="pl-en">a2c</span>(<span class="pl-s1">env</span>):</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L2" class="blob-num js-line-number" data-line-number="2"></td>
+        <td id="file-a2c-py-LC2" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">num_inputs</span> <span class="pl-c1">=</span> <span class="pl-s1">env</span>.<span class="pl-s1">observation_space</span>.<span class="pl-s1">shape</span>[<span class="pl-c1">0</span>]</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L3" class="blob-num js-line-number" data-line-number="3"></td>
+        <td id="file-a2c-py-LC3" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">num_outputs</span> <span class="pl-c1">=</span> <span class="pl-s1">env</span>.<span class="pl-s1">action_space</span>.<span class="pl-s1">n</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L4" class="blob-num js-line-number" data-line-number="4"></td>
+        <td id="file-a2c-py-LC4" class="blob-code blob-code-inner js-file-line">    </td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L5" class="blob-num js-line-number" data-line-number="5"></td>
+        <td id="file-a2c-py-LC5" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">actor_critic</span> <span class="pl-c1">=</span> <span class="pl-v">ActorCritic</span>(<span class="pl-s1">num_inputs</span>, <span class="pl-s1">num_outputs</span>, <span class="pl-s1">hidden_size</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L6" class="blob-num js-line-number" data-line-number="6"></td>
+        <td id="file-a2c-py-LC6" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">ac_optimizer</span> <span class="pl-c1">=</span> <span class="pl-s1">optim</span>.<span class="pl-v">Adam</span>(<span class="pl-s1">actor_critic</span>.<span class="pl-en">parameters</span>(), <span class="pl-s1">lr</span><span class="pl-c1">=</span><span class="pl-s1">learning_rate</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L7" class="blob-num js-line-number" data-line-number="7"></td>
+        <td id="file-a2c-py-LC7" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L8" class="blob-num js-line-number" data-line-number="8"></td>
+        <td id="file-a2c-py-LC8" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">all_lengths</span> <span class="pl-c1">=</span> []</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L9" class="blob-num js-line-number" data-line-number="9"></td>
+        <td id="file-a2c-py-LC9" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">average_lengths</span> <span class="pl-c1">=</span> []</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L10" class="blob-num js-line-number" data-line-number="10"></td>
+        <td id="file-a2c-py-LC10" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">all_rewards</span> <span class="pl-c1">=</span> []</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L11" class="blob-num js-line-number" data-line-number="11"></td>
+        <td id="file-a2c-py-LC11" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">entropy_term</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L12" class="blob-num js-line-number" data-line-number="12"></td>
+        <td id="file-a2c-py-LC12" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L13" class="blob-num js-line-number" data-line-number="13"></td>
+        <td id="file-a2c-py-LC13" class="blob-code blob-code-inner js-file-line">    <span class="pl-k">for</span> <span class="pl-s1">episode</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-s1">max_episodes</span>):</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L14" class="blob-num js-line-number" data-line-number="14"></td>
+        <td id="file-a2c-py-LC14" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">log_probs</span> <span class="pl-c1">=</span> []</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L15" class="blob-num js-line-number" data-line-number="15"></td>
+        <td id="file-a2c-py-LC15" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">values</span> <span class="pl-c1">=</span> []</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L16" class="blob-num js-line-number" data-line-number="16"></td>
+        <td id="file-a2c-py-LC16" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">rewards</span> <span class="pl-c1">=</span> []</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L17" class="blob-num js-line-number" data-line-number="17"></td>
+        <td id="file-a2c-py-LC17" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L18" class="blob-num js-line-number" data-line-number="18"></td>
+        <td id="file-a2c-py-LC18" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">state</span> <span class="pl-c1">=</span> <span class="pl-s1">env</span>.<span class="pl-en">reset</span>()</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L19" class="blob-num js-line-number" data-line-number="19"></td>
+        <td id="file-a2c-py-LC19" class="blob-code blob-code-inner js-file-line">        <span class="pl-k">for</span> <span class="pl-s1">steps</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-s1">num_steps</span>):</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L20" class="blob-num js-line-number" data-line-number="20"></td>
+        <td id="file-a2c-py-LC20" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">value</span>, <span class="pl-s1">policy_dist</span> <span class="pl-c1">=</span> <span class="pl-s1">actor_critic</span>.<span class="pl-en">forward</span>(<span class="pl-s1">state</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L21" class="blob-num js-line-number" data-line-number="21"></td>
+        <td id="file-a2c-py-LC21" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">value</span> <span class="pl-c1">=</span> <span class="pl-s1">value</span>.<span class="pl-en">detach</span>().<span class="pl-en">numpy</span>()[<span class="pl-c1">0</span>,<span class="pl-c1">0</span>]</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L22" class="blob-num js-line-number" data-line-number="22"></td>
+        <td id="file-a2c-py-LC22" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">dist</span> <span class="pl-c1">=</span> <span class="pl-s1">policy_dist</span>.<span class="pl-en">detach</span>().<span class="pl-en">numpy</span>() </td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L23" class="blob-num js-line-number" data-line-number="23"></td>
+        <td id="file-a2c-py-LC23" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L24" class="blob-num js-line-number" data-line-number="24"></td>
+        <td id="file-a2c-py-LC24" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">action</span> <span class="pl-c1">=</span> <span class="pl-s1">np</span>.<span class="pl-s1">random</span>.<span class="pl-en">choice</span>(<span class="pl-s1">num_outputs</span>, <span class="pl-s1">p</span><span class="pl-c1">=</span><span class="pl-s1">np</span>.<span class="pl-en">squeeze</span>(<span class="pl-s1">dist</span>))</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L25" class="blob-num js-line-number" data-line-number="25"></td>
+        <td id="file-a2c-py-LC25" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">log_prob</span> <span class="pl-c1">=</span> <span class="pl-s1">torch</span>.<span class="pl-en">log</span>(<span class="pl-s1">policy_dist</span>.<span class="pl-en">squeeze</span>(<span class="pl-c1">0</span>)[<span class="pl-s1">action</span>])</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L26" class="blob-num js-line-number" data-line-number="26"></td>
+        <td id="file-a2c-py-LC26" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">entropy</span> <span class="pl-c1">=</span> <span class="pl-c1">-</span><span class="pl-s1">np</span>.<span class="pl-en">sum</span>(<span class="pl-s1">np</span>.<span class="pl-en">mean</span>(<span class="pl-s1">dist</span>) <span class="pl-c1">*</span> <span class="pl-s1">np</span>.<span class="pl-en">log</span>(<span class="pl-s1">dist</span>))</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L27" class="blob-num js-line-number" data-line-number="27"></td>
+        <td id="file-a2c-py-LC27" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">new_state</span>, <span class="pl-s1">reward</span>, <span class="pl-s1">done</span>, <span class="pl-s1">_</span> <span class="pl-c1">=</span> <span class="pl-s1">env</span>.<span class="pl-en">step</span>(<span class="pl-s1">action</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L28" class="blob-num js-line-number" data-line-number="28"></td>
+        <td id="file-a2c-py-LC28" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L29" class="blob-num js-line-number" data-line-number="29"></td>
+        <td id="file-a2c-py-LC29" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">rewards</span>.<span class="pl-en">append</span>(<span class="pl-s1">reward</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L30" class="blob-num js-line-number" data-line-number="30"></td>
+        <td id="file-a2c-py-LC30" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">values</span>.<span class="pl-en">append</span>(<span class="pl-s1">value</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L31" class="blob-num js-line-number" data-line-number="31"></td>
+        <td id="file-a2c-py-LC31" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">log_probs</span>.<span class="pl-en">append</span>(<span class="pl-s1">log_prob</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L32" class="blob-num js-line-number" data-line-number="32"></td>
+        <td id="file-a2c-py-LC32" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">entropy_term</span> <span class="pl-c1">+=</span> <span class="pl-s1">entropy</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L33" class="blob-num js-line-number" data-line-number="33"></td>
+        <td id="file-a2c-py-LC33" class="blob-code blob-code-inner js-file-line">            <span class="pl-s1">state</span> <span class="pl-c1">=</span> <span class="pl-s1">new_state</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L34" class="blob-num js-line-number" data-line-number="34"></td>
+        <td id="file-a2c-py-LC34" class="blob-code blob-code-inner js-file-line">            </td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L35" class="blob-num js-line-number" data-line-number="35"></td>
+        <td id="file-a2c-py-LC35" class="blob-code blob-code-inner js-file-line">            <span class="pl-k">if</span> <span class="pl-s1">done</span> <span class="pl-c1">or</span> <span class="pl-s1">steps</span> <span class="pl-c1">==</span> <span class="pl-s1">num_steps</span><span class="pl-c1">-</span><span class="pl-c1">1</span>:</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L36" class="blob-num js-line-number" data-line-number="36"></td>
+        <td id="file-a2c-py-LC36" class="blob-code blob-code-inner js-file-line">                <span class="pl-v">Qval</span>, <span class="pl-s1">_</span> <span class="pl-c1">=</span> <span class="pl-s1">actor_critic</span>.<span class="pl-en">forward</span>(<span class="pl-s1">new_state</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L37" class="blob-num js-line-number" data-line-number="37"></td>
+        <td id="file-a2c-py-LC37" class="blob-code blob-code-inner js-file-line">                <span class="pl-v">Qval</span> <span class="pl-c1">=</span> <span class="pl-v">Qval</span>.<span class="pl-en">detach</span>().<span class="pl-en">numpy</span>()[<span class="pl-c1">0</span>,<span class="pl-c1">0</span>]</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L38" class="blob-num js-line-number" data-line-number="38"></td>
+        <td id="file-a2c-py-LC38" class="blob-code blob-code-inner js-file-line">                <span class="pl-s1">all_rewards</span>.<span class="pl-en">append</span>(<span class="pl-s1">np</span>.<span class="pl-en">sum</span>(<span class="pl-s1">rewards</span>))</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L39" class="blob-num js-line-number" data-line-number="39"></td>
+        <td id="file-a2c-py-LC39" class="blob-code blob-code-inner js-file-line">                <span class="pl-s1">all_lengths</span>.<span class="pl-en">append</span>(<span class="pl-s1">steps</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L40" class="blob-num js-line-number" data-line-number="40"></td>
+        <td id="file-a2c-py-LC40" class="blob-code blob-code-inner js-file-line">                <span class="pl-s1">average_lengths</span>.<span class="pl-en">append</span>(<span class="pl-s1">np</span>.<span class="pl-en">mean</span>(<span class="pl-s1">all_lengths</span>[<span class="pl-c1">-</span><span class="pl-c1">10</span>:]))</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L41" class="blob-num js-line-number" data-line-number="41"></td>
+        <td id="file-a2c-py-LC41" class="blob-code blob-code-inner js-file-line">                <span class="pl-k">if</span> <span class="pl-s1">episode</span> <span class="pl-c1">%</span> <span class="pl-c1">10</span> <span class="pl-c1">==</span> <span class="pl-c1">0</span>:                    </td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L42" class="blob-num js-line-number" data-line-number="42"></td>
+        <td id="file-a2c-py-LC42" class="blob-code blob-code-inner js-file-line">                    <span class="pl-s1">sys</span>.<span class="pl-s1">stdout</span>.<span class="pl-en">write</span>(<span class="pl-s">"episode: {}, reward: {}, total length: {}, average length: {} <span class="pl-cce">\n</span>"</span>.<span class="pl-en">format</span>(<span class="pl-s1">episode</span>, <span class="pl-s1">np</span>.<span class="pl-en">sum</span>(<span class="pl-s1">rewards</span>), <span class="pl-s1">steps</span>, <span class="pl-s1">average_lengths</span>[<span class="pl-c1">-</span><span class="pl-c1">1</span>]))</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L43" class="blob-num js-line-number" data-line-number="43"></td>
+        <td id="file-a2c-py-LC43" class="blob-code blob-code-inner js-file-line">                <span class="pl-k">break</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L44" class="blob-num js-line-number" data-line-number="44"></td>
+        <td id="file-a2c-py-LC44" class="blob-code blob-code-inner js-file-line">        </td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L45" class="blob-num js-line-number" data-line-number="45"></td>
+        <td id="file-a2c-py-LC45" class="blob-code blob-code-inner js-file-line">        <span class="pl-c"># compute Q values</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L46" class="blob-num js-line-number" data-line-number="46"></td>
+        <td id="file-a2c-py-LC46" class="blob-code blob-code-inner js-file-line">        <span class="pl-v">Qvals</span> <span class="pl-c1">=</span> <span class="pl-s1">np</span>.<span class="pl-en">zeros_like</span>(<span class="pl-s1">values</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L47" class="blob-num js-line-number" data-line-number="47"></td>
+        <td id="file-a2c-py-LC47" class="blob-code blob-code-inner js-file-line">        <span class="pl-k">for</span> <span class="pl-s1">t</span> <span class="pl-c1">in</span> <span class="pl-en">reversed</span>(<span class="pl-en">range</span>(<span class="pl-en">len</span>(<span class="pl-s1">rewards</span>))):</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L48" class="blob-num js-line-number" data-line-number="48"></td>
+        <td id="file-a2c-py-LC48" class="blob-code blob-code-inner js-file-line">            <span class="pl-v">Qval</span> <span class="pl-c1">=</span> <span class="pl-s1">rewards</span>[<span class="pl-s1">t</span>] <span class="pl-c1">+</span> <span class="pl-v">GAMMA</span> <span class="pl-c1">*</span> <span class="pl-v">Qval</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L49" class="blob-num js-line-number" data-line-number="49"></td>
+        <td id="file-a2c-py-LC49" class="blob-code blob-code-inner js-file-line">            <span class="pl-v">Qvals</span>[<span class="pl-s1">t</span>] <span class="pl-c1">=</span> <span class="pl-v">Qval</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L50" class="blob-num js-line-number" data-line-number="50"></td>
+        <td id="file-a2c-py-LC50" class="blob-code blob-code-inner js-file-line">  </td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L51" class="blob-num js-line-number" data-line-number="51"></td>
+        <td id="file-a2c-py-LC51" class="blob-code blob-code-inner js-file-line">        <span class="pl-c">#update actor critic</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L52" class="blob-num js-line-number" data-line-number="52"></td>
+        <td id="file-a2c-py-LC52" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">values</span> <span class="pl-c1">=</span> <span class="pl-s1">torch</span>.<span class="pl-v">FloatTensor</span>(<span class="pl-s1">values</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L53" class="blob-num js-line-number" data-line-number="53"></td>
+        <td id="file-a2c-py-LC53" class="blob-code blob-code-inner js-file-line">        <span class="pl-v">Qvals</span> <span class="pl-c1">=</span> <span class="pl-s1">torch</span>.<span class="pl-v">FloatTensor</span>(<span class="pl-v">Qvals</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L54" class="blob-num js-line-number" data-line-number="54"></td>
+        <td id="file-a2c-py-LC54" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">log_probs</span> <span class="pl-c1">=</span> <span class="pl-s1">torch</span>.<span class="pl-en">stack</span>(<span class="pl-s1">log_probs</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L55" class="blob-num js-line-number" data-line-number="55"></td>
+        <td id="file-a2c-py-LC55" class="blob-code blob-code-inner js-file-line">        </td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L56" class="blob-num js-line-number" data-line-number="56"></td>
+        <td id="file-a2c-py-LC56" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">advantage</span> <span class="pl-c1">=</span> <span class="pl-v">Qvals</span> <span class="pl-c1">-</span> <span class="pl-s1">values</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L57" class="blob-num js-line-number" data-line-number="57"></td>
+        <td id="file-a2c-py-LC57" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">actor_loss</span> <span class="pl-c1">=</span> (<span class="pl-c1">-</span><span class="pl-s1">log_probs</span> <span class="pl-c1">*</span> <span class="pl-s1">advantage</span>).<span class="pl-en">mean</span>()</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L58" class="blob-num js-line-number" data-line-number="58"></td>
+        <td id="file-a2c-py-LC58" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">critic_loss</span> <span class="pl-c1">=</span> <span class="pl-c1">0.5</span> <span class="pl-c1">*</span> <span class="pl-s1">advantage</span>.<span class="pl-en">pow</span>(<span class="pl-c1">2</span>).<span class="pl-en">mean</span>()</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L59" class="blob-num js-line-number" data-line-number="59"></td>
+        <td id="file-a2c-py-LC59" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">ac_loss</span> <span class="pl-c1">=</span> <span class="pl-s1">actor_loss</span> <span class="pl-c1">+</span> <span class="pl-s1">critic_loss</span> <span class="pl-c1">+</span> <span class="pl-c1">0.001</span> <span class="pl-c1">*</span> <span class="pl-s1">entropy_term</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L60" class="blob-num js-line-number" data-line-number="60"></td>
+        <td id="file-a2c-py-LC60" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L61" class="blob-num js-line-number" data-line-number="61"></td>
+        <td id="file-a2c-py-LC61" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">ac_optimizer</span>.<span class="pl-en">zero_grad</span>()</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L62" class="blob-num js-line-number" data-line-number="62"></td>
+        <td id="file-a2c-py-LC62" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">ac_loss</span>.<span class="pl-en">backward</span>()</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L63" class="blob-num js-line-number" data-line-number="63"></td>
+        <td id="file-a2c-py-LC63" class="blob-code blob-code-inner js-file-line">        <span class="pl-s1">ac_optimizer</span>.<span class="pl-en">step</span>()</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L64" class="blob-num js-line-number" data-line-number="64"></td>
+        <td id="file-a2c-py-LC64" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L65" class="blob-num js-line-number" data-line-number="65"></td>
+        <td id="file-a2c-py-LC65" class="blob-code blob-code-inner js-file-line">        </td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L66" class="blob-num js-line-number" data-line-number="66"></td>
+        <td id="file-a2c-py-LC66" class="blob-code blob-code-inner js-file-line">    </td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L67" class="blob-num js-line-number" data-line-number="67"></td>
+        <td id="file-a2c-py-LC67" class="blob-code blob-code-inner js-file-line">    <span class="pl-c"># Plot results</span></td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L68" class="blob-num js-line-number" data-line-number="68"></td>
+        <td id="file-a2c-py-LC68" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">smoothed_rewards</span> <span class="pl-c1">=</span> <span class="pl-s1">pd</span>.<span class="pl-v">Series</span>.<span class="pl-en">rolling</span>(<span class="pl-s1">pd</span>.<span class="pl-v">Series</span>(<span class="pl-s1">all_rewards</span>), <span class="pl-c1">10</span>).<span class="pl-en">mean</span>()</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L69" class="blob-num js-line-number" data-line-number="69"></td>
+        <td id="file-a2c-py-LC69" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">smoothed_rewards</span> <span class="pl-c1">=</span> [<span class="pl-s1">elem</span> <span class="pl-k">for</span> <span class="pl-s1">elem</span> <span class="pl-c1">in</span> <span class="pl-s1">smoothed_rewards</span>]</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L70" class="blob-num js-line-number" data-line-number="70"></td>
+        <td id="file-a2c-py-LC70" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">plt</span>.<span class="pl-en">plot</span>(<span class="pl-s1">all_rewards</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L71" class="blob-num js-line-number" data-line-number="71"></td>
+        <td id="file-a2c-py-LC71" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">plt</span>.<span class="pl-en">plot</span>(<span class="pl-s1">smoothend_rewards</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L72" class="blob-num js-line-number" data-line-number="72"></td>
+        <td id="file-a2c-py-LC72" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">plt</span>.<span class="pl-en">plot</span>()</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L73" class="blob-num js-line-number" data-line-number="73"></td>
+        <td id="file-a2c-py-LC73" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">plt</span>.<span class="pl-en">xlabel</span>(<span class="pl-s">'Episode'</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L74" class="blob-num js-line-number" data-line-number="74"></td>
+        <td id="file-a2c-py-LC74" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">plt</span>.<span class="pl-en">ylabel</span>(<span class="pl-s">'Reward'</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L75" class="blob-num js-line-number" data-line-number="75"></td>
+        <td id="file-a2c-py-LC75" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">plt</span>.<span class="pl-en">show</span>()</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L76" class="blob-num js-line-number" data-line-number="76"></td>
+        <td id="file-a2c-py-LC76" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L77" class="blob-num js-line-number" data-line-number="77"></td>
+        <td id="file-a2c-py-LC77" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">plt</span>.<span class="pl-en">plot</span>(<span class="pl-s1">all_lengths</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L78" class="blob-num js-line-number" data-line-number="78"></td>
+        <td id="file-a2c-py-LC78" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">plt</span>.<span class="pl-en">plot</span>(<span class="pl-s1">average_lengths</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L79" class="blob-num js-line-number" data-line-number="79"></td>
+        <td id="file-a2c-py-LC79" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">plt</span>.<span class="pl-en">xlabel</span>(<span class="pl-s">'Episode'</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L80" class="blob-num js-line-number" data-line-number="80"></td>
+        <td id="file-a2c-py-LC80" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">plt</span>.<span class="pl-en">ylabel</span>(<span class="pl-s">'Episode length'</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-a2c-py-L81" class="blob-num js-line-number" data-line-number="81"></td>
+        <td id="file-a2c-py-LC81" class="blob-code blob-code-inner js-file-line">    <span class="pl-s1">plt</span>.<span class="pl-en">show</span>()</td>
+      </tr>
+</tbody></table>
+
+
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      <div class="gist-meta">
+        <a href="https://gist.github.com/cyoon1729/5399c9718909b7d7dc63b0853acd242a/raw/883e1fa7cafdcfcabbfe6ef0753bfabd2777c5ca/a2c.py" style="float:right">view raw</a>
+        <a href="https://gist.github.com/cyoon1729/5399c9718909b7d7dc63b0853acd242a#file-a2c-py">a2c.py</a>
+        hosted with ❤ by <a href="https://github.com/">GitHub</a>
+      </div>
+    </div>
+</div>
+<script>var height = -1; var delayMs = 200; if (document) {document.domain = document.domain;}function notifyResize(height) {height = height ? height : document.documentElement.offsetHeight; var resized = false; if (window.donkey && donkey.resize) {donkey.resize(height);var elements = document.getElementsByClassName("gist-data"); for (var i = 0; i < elements.length; i++) {elements[i].style.overflow = "visible"}resized = true;}if (parent && parent._resizeIframe) {var obj = {iframe: window.frameElement, height: height}; parent._resizeIframe(obj); resized = true;}if (window.location && window.location.hash === "#amp=1" && window.parent && window.parent.postMessage) {window.parent.postMessage({sentinel: "amp", type: "embed-size", height: height}, "*");}if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.resize) {window.webkit.messageHandlers.resize.postMessage(height); resized = true;}return resized;}function maybeResize() {try {if (document.documentElement.offsetHeight != height && notifyResize()) {height = document.documentElement.offsetHeight;}delayMs = Math.min(delayMs * 2, 1000000); setTimeout(maybeResize, delayMs);} catch(error) {console.log('maybeResize error: ', error)}}maybeResize();</script></body></html>
